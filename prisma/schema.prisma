@@ -1,0 +1,78 @@
+datasource db {
+    provider     = "mysql"
+    url          = env("DATABASE_URL")
+    relationMode = "prisma"
+}
+
+model Category {
+    id        Int                    @id @default(autoincrement())
+    name      String                 @db.VarChar(255)
+    thumbnail String
+    cuisines  CuisinesOnCategories[]
+}
+
+model Cart {
+    id        Int               @id @default(autoincrement())
+    createdAt DateTime          @default(now())
+    updatedAt DateTime          @updatedAt
+    cuisines  CuisinesOnCarts[]
+    author    Author?
+}
+
+model Cuisine {
+    id          Int      @id @default(autoincrement())
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    title       String   @db.VarChar(255)
+    description String   @db.Text
+    thumbnail   String?   @db.Text
+
+
+    authors    CuisinesOnAuthors[]
+    categories CuisinesOnCategories[]
+    carts      CuisinesOnCarts[]
+}
+
+model Author {
+    id       Int                 @id @default(autoincrement())
+    email    String              @unique
+    name     String
+    avatar   String
+    cuisines CuisinesOnAuthors[]
+    cartId   Int                 @unique
+    cart     Cart                @relation(fields: [cartId], references: [id])
+}
+
+model CuisinesOnAuthors {
+    authorId  Int
+    author    Author  @relation(fields: [authorId], references: [id])
+    cuisineId Int
+    cuisine   Cuisine @relation(fields: [cuisineId], references: [id])
+
+    @@id([authorId, cuisineId])
+    @@index([authorId])
+    @@index([cuisineId])
+}
+
+model CuisinesOnCategories {
+    categoryId Int
+    category   Category @relation(fields: [categoryId], references: [id])
+    cuisineId  Int
+    cuisine    Cuisine  @relation(fields: [cuisineId], references: [id])
+
+    @@id([categoryId, cuisineId])
+    @@index([categoryId])
+    @@index([cuisineId])
+}
+
+model CuisinesOnCarts {
+    cartId    Int
+    cart      Cart    @relation(fields: [cartId], references: [id])
+    cuisineId Int
+    cuisine   Cuisine @relation(fields: [cuisineId], references: [id])
+    num       Int
+
+    @@id([cartId, cuisineId])
+    @@index([cartId])
+    @@index([cuisineId])
+}

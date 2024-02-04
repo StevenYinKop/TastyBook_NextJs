@@ -1,9 +1,12 @@
+"use client";
 import { configureStore } from '@reduxjs/toolkit'
-import {reducer} from "./redux/reducer";
+import {CartsReducer} from "./redux/reducer";
 
 export const makeStore = () => {
     return configureStore({
-        reducer
+        reducer: {
+            carts: CartsReducer
+        }
     })
 }
 

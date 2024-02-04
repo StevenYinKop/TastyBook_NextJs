@@ -92,17 +92,17 @@ const OrderPage = () => {
                                         <Text as="div" size="4" weight="bold">
                                             {activeCategory?.category} + {item}
                                         </Text>
-                                        <Text as="div" size="4" color="gray">
+                                        <Text as="div" size="2" color="gray">
                                             {`${activeCategory?.category}的配菜们。。。。。。`}
                                         </Text>
                                     </Box>
                                 </Flex>
-                                <Flex gap={"4"} justify={"between"} align={"center"}>
-                                    <IconButton size="3" variant="soft">
-                                        <PlusIcon width="22" height="22" />
+                                <Flex gap={{md: "2", lg: "3"}} justify={"between"} align={"center"}>
+                                    <IconButton className="cursor-pointer" radius="full" size={{md: "1", lg: "2"}} variant="soft">
+                                        <PlusIcon width=" " height="22" />
                                     </IconButton>
                                     <Text>{"1"}</Text>
-                                    <IconButton size="3" variant="soft">
+                                    <IconButton className="cursor-pointer" radius="full" size={{md: "1", lg: "2"}} variant="soft">
                                         <MinusIcon width="22" height="22" />
                                     </IconButton>
                                 </Flex>
