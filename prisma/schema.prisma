@@ -25,8 +25,8 @@ model Cuisine {
     updatedAt   DateTime @updatedAt
     title       String   @db.VarChar(255)
     description String   @db.Text
-    thumbnail   String?   @db.Text
-
+    detail      String   @db.Text
+    thumbnail   String?  @db.Text
 
     authors    CuisinesOnAuthors[]
     categories CuisinesOnCategories[]
