@@ -1,60 +1,115 @@
 # TastyBook
 
 ## Implement Redux in Next.js project
-1. install npm package: `redux` `redux-thunk` `redux-devtools-extension` `react-redux` `next-redux-wrapper`
-2. new directory: `/lib/redux/{actions/, constants/, reducers/, store.js}`
+1. npm install `npm install @reduxjs/toolkit react-redux`
+2. create folder and files `/lib/stores.ts`, `lib/features/cart-slice.ts`
 
-`/lib/redux/store.js`
-```javascript
-import {createStore, applyMiddleware} from 'redux';
-import {HYDRATE, createWrapper} from 'next-redux-wrapper'
-import thunkMiddleware from 'redux-thunk'
-// hydration is a process of filling an object with some data.
-const bindMiddleware = (middleware) => {
-    if (process.env.NODE_ENV !== 'production') {
-        const {composeWithDevTools} = require('redux-devtools-extension');
-        return composeWithDevTools(applyMiddleware(...middleware));
+`/lib/stores.ts`:
+```typescript
+import { configureStore } from "@reduxjs/toolkit";
+
+export const store = configureStore({
+    reducer: {
+        
     }
-    return applyMiddleware(...middleware);
-}
-
-const reducer = (state, action) => {
-  if (action.type === HYDRATE) {
-      const nextState = {
-          ...state,
-          ...action.payload
-      };
-      return nextState;
-  } else {
-      return reducers(state, action);
-  }
-};
-
-const initStore = () => {
-    return createStore(reducer, bindMiddleware([thunkMiddleware]));
-};
-
-export const wrapper = createWrapper(initStore);
-```
-
-`/lib/reducers/reducers.js`
-```javascript
-import { combineReducers } from 'redux';
-
-const reducer = combineReducers({
-    
 });
 
-export default reducer;
+```
+`lib/features/cart-slice.ts`:
+```typescript
+import {createSlice, Payload} from "@reduxjs/toolkit";
+
+type CartState = {
+    uid: string
+    cuisineList: Cart[]
+}
+
+// define initial state type
+type InitialState = {
+    value: CanvasRect;
+}
+
+// create object containing all states
+const initialState = {
+    value: {
+        uid: "",
+        cuisineList: []
+    }
+}
+
+export const cart = createSlice({
+    name: "cart",
+    initialState,
+    reducers: {
+        addIntoCart: (state, action: PayloadAction<Cuisine>) => {
+            const cuisineList = [...state.cuisineList];
+            cuisineList.push(action.payload);
+            return {
+                value: {
+                    uid: state.uid,
+                    cuisineList
+                }
+            }
+        },
+        clearCart: () => initialState
+    }
+});
+
+export const { addIntoCarts, clearCart } = cart.actions;
+export default cart.reducer
 ```
 
-`src/app.js`
-```javascript
-import {wrapper} from '../redux/store'
+`/lib/stores.ts`:
+```typescript
+import { configureStore } from "@reduxjs/toolkit";
 
-function MyApp({Component, pageProps}) {
-    return <Component {...pageProps} />
-};
+export const store = configureStore({
+    reducer: {
+        
+    }
+});
 
-export default wrapper.withRedux(MyApp);
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch;
+
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+```
+
+`/lib/provider.tsx`
+```typescript
+'use client'
+import { useRef } from 'react'
+import { Provider } from 'react-redux'
+import { makeStore, AppStore } from '../../../lib/store'
+
+export default function StoreProvider({ children }: {
+    children: React.ReactNode
+}) {
+    const storeRef = useRef<AppStore>()
+    if (!storeRef.current) {
+        // Create the store instance the first time this renders
+        storeRef.current = makeStore()
+    }
+
+    return <Provider store={storeRef.current}>{children}</Provider>
+}
+
+```
+
+
+## How to use Redux?
+```typescript
+import { addIntoCart, clearCart } from "@/lib/features/cart-slice";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "@/lib/stores";
+
+expot default function Page() {
+    const dispatch = useDispatch<AppDispatch>();
+    // to dispatch action
+    dispatch(addIntoCart({...}));
+
+    // use the variable stored in redux
+    const carts = useAppSelector((state: ) => state.cartReducer.value.carts);
+}
+
 ```

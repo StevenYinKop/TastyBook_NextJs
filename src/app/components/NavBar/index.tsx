@@ -13,6 +13,10 @@ const Navbar = () => {
     const [isHovering, setIsHovered] = useState(false);
     const onMouseEnter = () => setIsHovered(true);
     const onMouseLeave = () => setIsHovered(false);
+
+    // let s: never = "";
+    // s = 1;
+
     const routers: Record<string, string>[] = [
         // { label: "主页", url: "/" },
         {label: "点菜", url: "/order"},
