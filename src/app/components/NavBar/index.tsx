@@ -1,15 +1,14 @@
 "use client";
-import {Box, Flex, IconButton, Text} from '@radix-ui/themes'
+import {Flex, Text} from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
-import {usePathname, useRouter} from 'next/navigation';
+import {usePathname} from 'next/navigation';
 import React, {useState} from 'react'
-import {ArchiveIcon} from "@radix-ui/react-icons";
-import {useAppStore} from "../../../../lib/hook";
+
+import CartIcon from '../Cart';
 
 const Navbar = () => {
     const pathname = usePathname();
-    console.log(pathname);
     const [isHovering, setIsHovered] = useState(false);
     const onMouseEnter = () => setIsHovered(true);
     const onMouseLeave = () => setIsHovered(false);
@@ -19,11 +18,9 @@ const Navbar = () => {
 
     const routers: Record<string, string>[] = [
         // { label: "主页", url: "/" },
-        {label: "点菜", url: "/order"},
+        {label: "点菜", url: "/menu"},
         {label: "菜谱", url: "/recipes"},
     ];
-    const appStore = useAppStore()
-    console.log(appStore)
     return (
         <nav className="px-5">
             <Flex align={"center"} justify={"between"}>
@@ -52,11 +49,7 @@ const Navbar = () => {
                     ))}
                 </Flex>
                 <Flex>
-                    <IconButton size={"3"} radius="full" variant="soft" color={"pink"} >
-                        <ArchiveIcon
-                            width="22"
-                            height="22"/>
-                    </IconButton>
+                    <CartIcon />
                 </Flex>
             </Flex>
         </nav>

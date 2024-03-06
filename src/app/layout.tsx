@@ -23,18 +23,18 @@ export default function RootLayout({ children }: {
     return (
         <html lang="en" className={inter.variable}>
         <body className={classNames(inter.className, "bg-rose-200")}>
-        <StoreProvider>
-            <Theme>
-                <Container className="overflow-y-hidden">
-                    <Flex direction={"column"} className='bg-zinc-100 h-screen'>
-                        <Navbar></Navbar>
-                        <Box className='overflow-y-hidden h-full'>
-                            {children}
-                        </Box>
-                    </Flex>
-                </Container>
-            </Theme>
-        </StoreProvider>
+            <StoreProvider>
+                <Theme>
+                    <Container className="overflow-y-hidden">
+                        <Flex direction={"column"} className='bg-zinc-100 h-screen'>
+                            <Navbar></Navbar>
+                            <Box className='overflow-y-hidden h-full'>
+                                {children}
+                            </Box>
+                        </Flex>
+                    </Container>
+                </Theme>
+            </StoreProvider>
         </body>
         </html>
     )

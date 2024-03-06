@@ -1,22 +1,39 @@
-"use client";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { createSlice } from '@reduxjs/toolkit';
-
-export interface CounterState {
-    carts: any[]
+type CartState = {
+    uid: string
+    cuisineList: any[]
 }
 
-const initialState: CounterState = {
-    carts: []
+// define initial state type
+type InitialState = {
+    value: CartState;
 }
 
-export const CartsReducer = createSlice({
-    name: "carts",
+const initialState: InitialState = {
+    value: {
+        uid: "",
+        cuisineList: []
+    }
+}
+
+export const cart = createSlice({
+    name: "cart",
     initialState,
     reducers: {
-        addToCarts: (state) => { state.carts.push() },
-        removeFromCarts: (state, action) => {
-            action.payload
-        }
-    },
+        addIntoCart: (state, action: PayloadAction<any>) => {
+            const cuisineList = [...state.value.cuisineList, action.payload];
+            console.log(cuisineList);
+            return {
+                value: {
+                    uid: state.value.uid,
+                    cuisineList
+                }
+            }
+        },
+        clearCart: () => initialState
+    }
 });
+
+export const {addIntoCart, clearCart} = cart.actions;
+export default cart.reducer;
