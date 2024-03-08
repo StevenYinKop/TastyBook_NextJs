@@ -15,7 +15,6 @@ export type Category = {
 
 const OrderPage = () => {
     const searchParams = useSearchParams();
-    console.log(searchParams);
     const categories: Category[] = [
         {id: 0, category: "猪肉🐷"},
         {id: 1, category: "羊肉🐑"},
@@ -71,7 +70,7 @@ const OrderPage = () => {
                                     </Box>
                                 </Flex>
                                 <Flex gap={"4"} justify={"between"} align={"center"}>
-                                    <Button shape="circle" icon={<PlusIcon width="22" height="22" />} />
+                                    <Button onClick={() => dispatch(addIntoCart(item))} shape="circle" icon={<PlusIcon width="22" height="22" />} />
                                     {/* <IconButton onClick={() => dispatch(addIntoCart(item))} size="3" variant="soft"> */}
                                     {/* </IconButton> */}
                                 </Flex>

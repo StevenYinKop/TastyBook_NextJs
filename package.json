@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "dotenv -e development.env -- next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:migrate:dev": "dotenv -e development.env -- npx prisma migrate dev"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.504.0",

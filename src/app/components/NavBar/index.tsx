@@ -3,9 +3,11 @@ import {Flex, Text} from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation';
-import React, {useState} from 'react'
+import React, {ReactElement, useState} from 'react'
 
 import CartIcon from '../Cart';
+import {AppstoreAddOutlined, AppstoreOutlined, HomeOutlined} from "@ant-design/icons";
+import {Button} from "antd";
 
 const Navbar = () => {
     const pathname = usePathname();
@@ -16,10 +18,11 @@ const Navbar = () => {
     // let s: never = "";
     // s = 1;
 
-    const routers: Record<string, string>[] = [
+    const routers: Record<string, string | ReactElement>[] = [
         // { label: "主页", url: "/" },
-        {label: "点菜", url: "/menu"},
-        {label: "菜谱", url: "/recipes"},
+        {label: "点菜", url: "/menu", icon: <HomeOutlined/>},
+        {label: "菜谱", url: "/recipes", icon: <AppstoreOutlined/>},
+        {label: "新菜谱", url: "/admin/cuisine/new", icon: <AppstoreAddOutlined/>}
     ];
     return (
         <nav className="px-5">
@@ -41,15 +44,17 @@ const Navbar = () => {
                             </Image>)}
                     </Link>
                     {routers.map(router => (
-                        <Link key={router.url} href={router.url}>
-                            <Text className={`${router.url === pathname ? "font-bold" : "font-normal"}`}>
-                                {router.label}
-                            </Text>
+                        <Link key={router.url as string} href={router.url as string}>
+                            <Button type={"text"} size={`${router.url === pathname ? "large" : "middle"}`}>
+                                <Text>
+                                    {router.icon}
+                                </Text>
+                            </Button>
                         </Link>
                     ))}
                 </Flex>
                 <Flex>
-                    <CartIcon />
+                    <CartIcon/>
                 </Flex>
             </Flex>
         </nav>

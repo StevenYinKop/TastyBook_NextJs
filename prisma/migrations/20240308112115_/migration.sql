@@ -23,6 +23,7 @@ CREATE TABLE `Cuisine` (
     `updatedAt` DATETIME(3) NOT NULL,
     `title` VARCHAR(255) NOT NULL,
     `description` TEXT NOT NULL,
+    `detail` TEXT NOT NULL,
     `thumbnail` TEXT NULL,
 
     PRIMARY KEY (`id`)

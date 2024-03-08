@@ -1,6 +1,6 @@
 'use client';
 import { Button, Flex, Select, TextField, TextFieldInput } from '@radix-ui/themes';
-import { useState } from 'react'
+import {ChangeEvent, useState} from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
@@ -55,7 +55,30 @@ export default function NewCuisine() {
 
     setUploading(false)
   }
+  const onFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    debugger;
+    const files = e.target.files;
+    if (!files) {
+      return
+    }
+    const file = files[0];
+    // upload file
+    setUploading(true)
+    const response = await fetch(
+        process.env.NEXT_PUBLIC_BASE_URL + '/api/upload',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ filename: file.name, contentType: file.type }),
+        }
+    )
 
+    if (response.ok) {
+      const { url, fields } = await response.json()
+    }
+  }
   const createCuisine = async (data: any) => {
 
   }
@@ -92,16 +115,18 @@ export default function NewCuisine() {
               required
               className='sm:flex-1'></TextField.Input>
           </TextField.Root>
+          <TextField.Root className="w-full">
+            <TextField.Input
+              type="text"
+              placeholder='Link'
+              id='description'
+              className='sm:flex-1'></TextField.Input>
+          </TextField.Root>
           <Flex gap="4" align={"center"} justify={"between"} className='border-4 border-teal-500 border-dotted p-3'>
             <input
               id="file"
               type="file"
-              onChange={(e) => {
-                const files = e.target.files
-                if (files) {
-                  setFile(files[0])
-                }
-              }}
+              onChange={onFileUpload}
               accept="image/png, image/jpeg"
             />
           </Flex>

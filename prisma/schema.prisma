@@ -4,6 +4,10 @@ datasource db {
     relationMode = "prisma"
 }
 
+generator client {
+    provider = "prisma-client-js"
+}
+
 model Category {
     id        Int                    @id @default(autoincrement())
     name      String                 @db.VarChar(255)
