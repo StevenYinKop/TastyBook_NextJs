@@ -1,19 +1,23 @@
 'use client';
-import {Button, Flex, Select, TextField, TextFieldInput} from '@radix-ui/themes';
+import {Badge, Button, Flex, Select, TextField, TextFieldInput} from '@radix-ui/themes';
 import {ChangeEvent, useState} from 'react'
 import {useForm, SubmitHandler, Controller, useFormContext} from "react-hook-form"
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import {Cross1Icon} from "@radix-ui/react-icons";
 
 export default function NewCuisine() {
     const [file, setFile] = useState<File | null>(null)
     const [uploading, setLoading] = useState(false)
+    const [categories, setCategories] = useState<string[]>([]);
     const [value, setValue] = useState('');
     const {
         register,
         handleSubmit,
-        control
+        control,
+        ...rest
     } = useFormContext();
+    console.log(rest);
 
     const onSubmit = async (data) => {
         setLoading(true);
@@ -71,11 +75,16 @@ export default function NewCuisine() {
                             ></TextField.Input>
                         </TextField.Root>
                         <Controller
+                            name={"categories"}
                             control={control}
                             render={({field}) => (
                             <Select.Root
                                 {...field}
                                 required
+                                onValueChange={(value) => {
+                                    if (categories.includes(value)) return;
+                                    setCategories([...categories, value]);
+                                }}
                                 defaultValue="pork">
                                 <Select.Trigger/>
                                 <Select.Content position="popper">
@@ -84,8 +93,16 @@ export default function NewCuisine() {
                                     <Select.Item value="lamb">Lamb</Select.Item>
                                 </Select.Content>
                             </Select.Root>
-                        )} name={"categories"} />
+                        )}/>
                     </div>
+                    {categories.length > 0 && <Flex gap={"2"}>
+                        {categories.map(category => (<Badge key={category} color="indigo">
+                            {category}
+                            <Cross1Icon className={"size-4/5 border cursor-pointer"} onClick={() => {
+                                setCategories([...categories.filter(c => c !== category)]);
+                            }}/>
+                        </Badge>))}
+                    </Flex>}
                     <TextField.Root className="w-full">
                         <TextField.Input
                             type="text"
