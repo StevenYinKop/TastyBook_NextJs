@@ -32,9 +32,28 @@ model Cuisine {
     detail      String   @db.Text
     thumbnail   String?  @db.Text
 
+    attrs      CuisinesOnAttributes[]
     authors    CuisinesOnAuthors[]
     categories CuisinesOnCategories[]
     carts      CuisinesOnCarts[]
+}
+
+model CuisineAttribute {
+    id  Int @id @default(autoincrement())
+    typeId Int
+    value String @db.Text
+    cuisines CuisinesOnAttributes[]
+}
+
+model CuisinesOnAttributes {
+    attrId  Int
+    attr    CuisineAttribute  @relation(fields: [attrId], references: [id])
+    cuisineId Int
+    cuisine   Cuisine @relation(fields: [cuisineId], references: [id])
+
+    @@id([attrId, cuisineId])
+    @@index([attrId])
+    @@index([cuisineId])
 }
 
 model Author {
