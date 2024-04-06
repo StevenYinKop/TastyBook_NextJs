@@ -28,30 +28,32 @@ const OrderPage = () => {
     const dispatch = useDispatch<AppDispatch>();
     const [activeCategory, setActiveCategory] = useState<Category | undefined>({id: 1, category: "猪肉"});
     return (
-        <Flex gap="3" className='overflow-y-hidden h-full'>
-            <Box className='overflow-y-auto h-full w-32'>
+        <Flex gap="3" className='overflow-y-hidden h-full' direction={{initial: "column", md: "row" }}>
+            <Box className="overflow-x-auto md:overflow-y-auto md:w-32 md:h-full">
+                <Flex gap="3" direction={{initial: "row", md: "column"}}>
                 {categories
                     .map(item =>
                         (
-                            <Flex
+                            <Text
                                 onClick={() => setActiveCategory(item)}
                                 className={`${activeCategory?.id === item.id ?
                                     "border-l border-t border-b bg-slate-50" :
                                     "border-r"}
                                     py-1 px-3
                                     text-lg
-                                    h-8
-                                    min-w-4
                                     cursor-pointer
                                     full-width
+                                    w-full
+                                    md:h-8
+                                    md:min-w-4
                                 `}
-                                justify={"between"}
                                 key={item.id}>
                                 {item.category}
-                            </Flex>
+                            </Text>
                         )
                     )
                 }
+                </Flex>
             </Box>
             <Box grow={"1"} className='overflow-y-auto h-full relative'>
                 <Flex gap={"4"} direction={"column"} >
