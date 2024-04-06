@@ -37,13 +37,14 @@ const OrderPage = () => {
                             <Text
                                 onClick={() => setActiveCategory(item)}
                                 className={`${activeCategory?.id === item.id ?
-                                    "border-l border-t border-b bg-slate-50" :
-                                    "border-r"}
-                                    py-1 px-3
+                                    "border-l border-t bg-slate-50 initial:border-r md:border-b" :
+                                    "initial:border-b md:border-r"}
                                     text-lg
                                     cursor-pointer
                                     full-width
-                                    w-full
+                                    text-nowrap
+                                    py-1
+                                    px-3
                                     md:h-8
                                     md:min-w-4
                                 `}
