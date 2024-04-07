@@ -1,32 +1,38 @@
 "use client";
 import {Avatar, Box, Card, Flex, IconButton, Text} from '@radix-ui/themes'
 import {useSearchParams} from 'next/navigation';
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {PlusIcon} from "@radix-ui/react-icons";
 import { AppDispatch } from '../../../lib/store';
 import { addIntoCart } from '../../../lib/redux/reducer';
 import { useDispatch } from 'react-redux';
 import { Button } from 'antd';
+import axios from 'axios';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export type Category = {
     id: number;
-    category: string;
+    name: string;
+    thumbnail: string;
 };
 
 const OrderPage = () => {
+
+    
     const searchParams = useSearchParams();
-    const categories: Category[] = [
-        {id: 0, category: "猪肉🐷"},
-        {id: 1, category: "羊肉🐑"},
-        {id: 2, category: "鸡肉🐔"},
-        {id: 3, category: "虾🦐"},
-        {id: 4, category: "白菜🥬"},
-        {id: 5, category: "西兰花🥦"},
-        {id: 6, category: "金针菇🍄"},
-        {id: 7, category: "方便面🍜"}
-    ];
+    const categories: Category[] =
+        useQuery<Category[]>({queryKey: ["queryCategories"], queryFn: async () => (await axios.get('/api/categories')).data})
+        .data || [];
     const dispatch = useDispatch<AppDispatch>();
-    const [activeCategory, setActiveCategory] = useState<Category | undefined>({id: 1, category: "猪肉"});
+    const [activeCategory, setActiveCategory] = useState<Category | undefined>();
+    console.log(categories);
+    useEffect(() => {
+        console.log("useEffect", activeCategory);
+        if (activeCategory) {
+            console.log(axios.get(`/api/categories/${activeCategory.id}`))
+        }
+        // useQuery<Category[]>({queryKey: ["queryCuisineByCategor"], queryFn: async () => (await axios.get('/api/categories')).data})
+    }, [activeCategory]);
     return (
         <Flex gap="3" className='overflow-y-hidden h-full' direction={{initial: "column", md: "row" }}>
             <Box className="overflow-x-auto md:overflow-y-auto md:w-32 md:h-full">
@@ -37,7 +43,7 @@ const OrderPage = () => {
                             <Text
                                 onClick={() => setActiveCategory(item)}
                                 className={`${activeCategory?.id === item.id ?
-                                    "border-l border-t bg-slate-50 initial:border-r md:border-b" :
+                                    "border-l border-t bg-slate-50 initial1`:border-r md:border-b" :
                                     "initial:border-b md:border-r"}
                                     text-lg
                                     cursor-pointer
@@ -49,7 +55,7 @@ const OrderPage = () => {
                                     md:min-w-4
                                 `}
                                 key={item.id}>
-                                {item.category}
+                                {item.name}
                             </Text>
                         )
                     )
@@ -65,10 +71,10 @@ const OrderPage = () => {
                                     <Avatar src={"/samples/xiangcainiurou.jpeg"} size="5" fallback="T" color="indigo"/>
                                     <Box>
                                         <Text as="div" size="4" weight="bold">
-                                            {activeCategory?.category} + {item}
+                                            {activeCategory?.name} + {item}
                                         </Text>
                                         <Text as="div" size="4" color="gray">
-                                            {`${activeCategory?.category}的配菜们。。。。。。`}
+                                            {`${activeCategory?.name}的配菜们。。。。。。`}
                                         </Text>
                                     </Box>
                                 </Flex>
